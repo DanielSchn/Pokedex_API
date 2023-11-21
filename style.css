@@ -75,3 +75,8 @@ img {
     background-color: #4CAF50;
     z-index: 1;
 }
+
+
+.description {
+    font-size: 18px;
+}
