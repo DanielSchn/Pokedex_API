@@ -23,13 +23,13 @@ const typeColors = {
 
 
 async function loadPokemon() {
-    let url = 'https://pokeapi.co/api/v2/pokemon/166'; // Can use Number or Name. 4 is charmander
+    let randomNumber = Math.floor(Math.random() * 100) + 1;
+    let url = `https://pokeapi.co/api/v2/pokemon/${randomNumber}`; // Can use Number or Name. 4 is charmander
     let response = await fetch(url);
     currentPokemon = await response.json();
     console.log('Current Pokemon is: ', currentPokemon);
     renderPokemon();
 }
-
 
 
 function renderPokemon() {
@@ -40,15 +40,6 @@ function renderPokemon() {
     document.getElementById('pokemonWeigth').innerHTML = `Weight: ${currentPokemon['weight'] / 10} kg`;
     getStats();
 }
-
-
-// function getStats() {
-//     let stats = currentPokemon['stats'];
-//     for (let i = 0; i < stats.length; i++) {
-//         document.getElementById('stats').innerHTML += `<br>${stats[i]['stat']['name']}: ${stats[i]['base_stat']}`;
-
-//     }
-// }
 
 
 function getTypes() {
