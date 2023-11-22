@@ -1,4 +1,5 @@
 let currentPokemon;
+let currentPokemonNumber = 1;
 
 const typeColors = {
     "normal": "#A8A89A",
@@ -22,13 +23,31 @@ const typeColors = {
 };
 
 
+// async function loadPokemon() {
+//     let randomNumber = Math.floor(Math.random() * 300) + 1;
+//     let url = `https://pokeapi.co/api/v2/pokemon/${randomNumber}`; // Can use Number or Name. 4 is charmander
+//     let response = await fetch(url);
+//     currentPokemon = await response.json();
+//     console.log('Current Pokemon is: ', currentPokemon);
+//     renderPokemon();
+// }
+
+
 async function loadPokemon() {
-    let randomNumber = Math.floor(Math.random() * 300) + 1;
-    let url = `https://pokeapi.co/api/v2/pokemon/${randomNumber}`; // Can use Number or Name. 4 is charmander
-    let response = await fetch(url);
-    currentPokemon = await response.json();
-    console.log('Current Pokemon is: ', currentPokemon);
-    renderPokemon();
+    if (currentPokemonNumber <= 25) {
+        let url = `https://pokeapi.co/api/v2/pokemon/${currentPokemonNumber}`;
+        let response = await fetch(url);
+        currentPokemon = await response.json();
+        console.log('Current Pokemon is: ', currentPokemon);
+        renderPokemon();
+        
+        // Erhöhe die Nummer für das nächste Pokemon
+        currentPokemonNumber++;
+        loadPokemon();
+    } else {
+        console.log("All Pokemon loaded!");
+    }
+    
 }
 
 
@@ -91,6 +110,7 @@ function showPokemonCard() {
     let stats = document.getElementById('stats');
     description.style.display = (description.style.display === 'none' || description.style.display === '') ? 'block' : 'none';
     stats.style.display = (stats.style.display === 'none' || stats.style.display === '') ? 'block' : 'none';
+    document.getElementById('bodyForClick').setAttribute('onclick', 'closeCard()');
 }
 
 // NOTIZ FÜR MICH!
@@ -101,3 +121,21 @@ function showPokemonCard() {
 // } else {
 //     stats.style.display = 'none';
 // }
+
+
+function closeCard() {
+    document.getElementById('showCardBody').classList.toggle("showCard");
+    let description = document.getElementById('descriptionPokemon');
+    let stats = document.getElementById('stats');
+    description.style.display = (description.style.display === 'none' || description.style.display === '') ? 'block' : 'none';
+    stats.style.display = (stats.style.display === 'none' || stats.style.display === '') ? 'block' : 'none';
+    document.getElementById('bodyForClick').removeAttribute('onclick', 'closeCard()');
+}
+
+
+function showEventListener(event) {
+    if (event.stopPropagation) {
+        event.stopPropagation();
+    } 
+    showPokemonCard();
+}

@@ -9,9 +9,9 @@
     <script src="script.js"></script>
 </head>
 
-<body onload="loadPokemon()">
+<body onload="loadPokemon()" id="bodyForClick">
     <div id="showCardBody">
-        <div id="pokedex" onclick="showPokemonCard()">
+        <div id="pokedex" onclick="showEventListener(event)">
             <div id="pokemonName">NAME POKEMON</div>
             <img id="pokemonImage">
             <div class="description" id="descriptionPokemon">
