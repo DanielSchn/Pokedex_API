@@ -10,19 +10,20 @@
 </head>
 
 <body onload="loadPokemon()">
-    <div>
-        <div id="pokedex">
+    <div id="showCardBody">
+        <div id="pokedex" onclick="showPokemonCard()">
             <div id="pokemonName">NAME POKEMON</div>
             <img id="pokemonImage">
-            <div class="description">
+            <div class="description" id="descriptionPokemon">
                 <div id="type">POKEMON TYPE</div>
                 <div id="pokemonHeight">POKEMON HEIGHT</div>
-                <div id="pokemonWeigth">POKEMON WEIGHT</div>
+                <div id="pokemonWeight">POKEMON WEIGHT</div>
             </div>
             <div id="stats"></div>
         </div>
         <!-- <div class="infoContainer"></div> -->
     </div>
+
 </body>
 
 </html>
