@@ -7,10 +7,11 @@
 body {
     margin: 0;
     font-family: 'Gill Sans', sans-serif;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 
-#pokedex {
+.pokedexStyle {
     height: fit-content;
     width: fit-content;
     background-color: #E23B19;
@@ -22,6 +23,18 @@ body {
     flex-direction: column;
     border-radius: 40px;
     cursor: pointer;
+    margin: 8px;
+}
+
+
+.pokedexStyle h2 {
+    margin: 8px 0 8px 0;
+}
+
+
+.pokedexD {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 
@@ -33,7 +46,6 @@ body {
 
 img {
     height: 200px;
-    /* margin: 16px 0 16px 0; */
 }
 
 
@@ -97,4 +109,9 @@ img {
     align-items: center;
     scale: 1.2;
     transition: ease-in-out 500ms;
+}
+
+
+.dNone {
+    display: none;
 }
