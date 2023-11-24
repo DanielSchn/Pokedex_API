@@ -35,12 +35,11 @@ const typeColors = {
 
 
 async function loadPokemon() {
-    if (currentPokemonNumber <= 5) {
+    if (currentPokemonNumber <= 15) {
         let url = `https://pokeapi.co/api/v2/pokemon/${currentPokemonNumber}`;
         let response = await fetch(url);
         currentPokemon = await response.json();
         allPokemon.push(currentPokemon);
-        // Erhöhe die Nummer für das nächste Pokemon
         currentPokemonNumber++;
         loadPokemon();
     } else {
@@ -69,7 +68,7 @@ function renderAllPokemon() {
 
 function renderPokemon(pokemon, container) {
     container.innerHTML += `<h2>${pokemon['name'].charAt(0).toUpperCase() + pokemon['name'].slice(1)}</h2>
-        <img src="${pokemon['sprites']['other']['official-artwork']['front_shiny']}">
+        <img src="${pokemon['sprites']['other']['dream_world']['front_default']}">
         <p id="${pokemon['name']+6}" class="dNone">Height: ${pokemon['height'] / 10} m</p>
         <p id="${pokemon['name']+7}" class="dNone">Weight: ${pokemon['weight'] / 10} kg</p>`;
     getTypes(pokemon, container);
@@ -82,7 +81,7 @@ function getTypes(pokemon, container) {
     let typesHtml = '';
     let types = pokemon['types'];
     for (let j = 0; j < types.length; j++) {
-        typesHtml += `<p id="${pokemon['name']+(j+8)}" class="dNone">Type ${j + 1}: ${types[j]['type']['name'].charAt(0).toUpperCase() + types[j]['type']['name'].slice(1)}<br></p>`;
+        typesHtml += `<p id="${pokemon['name']+(j+8)}" class="dNone">Type: ${types[j]['type']['name'].charAt(0).toUpperCase() + types[j]['type']['name'].slice(1)}</p>`;
     }
     container.innerHTML += typesHtml;
 }
@@ -127,43 +126,27 @@ function getColorForType(type) {
 
 
 function showPokemonCard(pokemon) {
-    for (let g = 0; g < 10; g++) {
+    for (let g = 0; g < 9; g++) {
         document.getElementById(pokemon+g).classList.remove("dNone");
-        document.getElementById(pokemon+g).setAttribute('onclick', `closeCard(${pokemon})`);
-        
+        document.getElementById(pokemon+g).setAttribute('onclick', `closeCard('${pokemon}')`);   
     }
     document.getElementById(pokemon).removeAttribute('onclick', `showEventListener(event, '${pokemon}')`);
-    
-    // document.getElementById('pokedex').classList.toggle("dNone");
-    // document.getElementById('pokedex').classList.toggle("pokedexD");
-    // let description = document.getElementById(`${pokemon}`);
-    // let stats = document.getElementById(`${pokemon}`);
-    // description.style.display = (description.style.display === 'none' || description.style.display === '') ? 'block' : 'none';
-    // stats.style.display = (stats.style.display === 'none' || stats.style.display === '') ? 'block' : 'none';
-    // document.getElementById('bodyForClick').setAttribute('onclick', 'closeCard()');
+    document.getElementById(pokemon).setAttribute('onclick', `closeCard('${pokemon}')`);
+    document.getElementById('bodyForClick').setAttribute('onclick', `closeCard('${pokemon}')`);
+    document.getElementById(pokemon).classList.add('showCard');
 }
 
-// NOTIZ FÜR MICH!
-// stats.style.display = (stats.style.display === 'none' || stats.style.display === '') ? 'block' : 'none'; ist das gleiche wie eine IF / ELSE, nur schöner geschrieben und kürzer.
-//
-// if (stats.style.display === 'none' || stats.style.display === '') {
-//     stats.style.display = 'block';
-// } else {
-//     stats.style.display = 'none';
-// }
 
 
 function closeCard(pokemon) {
-    for (let g = 0; g < 10; g++) {
+    for (let g = 0; g < 9; g++) {
         document.getElementById(pokemon+g).classList.add("dNone");
-        document.getElementById(pokemon+g).removeAttribute('onclick', `closeCard(${pokemon})`);
+        document.getElementById(pokemon).removeAttribute('onclick', `closeCard('${pokemon}')`);    
     }
-    // document.getElementById('showCardBody').classList.toggle("showCard");
-    // let description = document.getElementById('descriptionPokemon');
-    // let stats = document.getElementById('stats');
-    // description.style.display = (description.style.display === 'none' || description.style.display === '') ? 'block' : 'none';
-    // stats.style.display = (stats.style.display === 'none' || stats.style.display === '') ? 'block' : 'none';
-    // document.getElementById('bodyForClick').removeAttribute('onclick', 'closeCard()');
+    document.getElementById(pokemon).setAttribute('onclick', `showEventListener(event, '${pokemon}')`);
+    document.getElementById('bodyForClick').removeAttribute('onclick', `closeCard('${pokemon}')`);
+    document.getElementById(pokemon).classList.remove('showCard');
+    event.stopPropagation();
 }
 
 

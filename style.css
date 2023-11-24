@@ -11,9 +11,16 @@ body {
 }
 
 
+p {
+    margin: 4px 0 4px 0;
+}
+
+
 .pokedexStyle {
     height: fit-content;
     width: fit-content;
+    min-width: 200px;
+    min-height: 248px;
     background-color: #E23B19;
     color: white;
     padding: 24px;
@@ -35,6 +42,7 @@ body {
 .pokedexD {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 
@@ -45,7 +53,9 @@ body {
 
 
 img {
-    height: 200px;
+    max-width: 176px;
+    max-height: 176px;
+    margin-top: 16px;
 }
 
 
@@ -86,7 +96,7 @@ img {
     left: 0;
     height: 25px;
     width: 0;
-    background-color: #4CAF50;
+    background-color: #0a8d0f;
     z-index: 1;
 }
 
@@ -103,12 +113,11 @@ img {
 
 
 .showCard {
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     scale: 1.2;
-    transition: ease-in-out 500ms;
+    transition: ease-in-out 125ms;
 }
 
 
