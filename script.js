@@ -24,8 +24,24 @@ const typeColors = {
 };
 
 
+async function includeHTML() {
+    let includeElements = document.querySelectorAll('[w3-include-html]');   // Abrufen der Daten mit dem Attribut w3-include-html und speichern in einem Array
+    for (let i = 0; i < includeElements.length; i++) {                      // For Schleife zum abarbeiten aller Elemente mit dem Attribut w3-include-html
+        const element = includeElements[i];
+        file = element.getAttribute("w3-include-html");                     // "includes/header.html"
+        let resp = await fetch(file);
+        if (resp.ok) {
+            element.innerHTML = await resp.text();
+        } else {
+            element.innerHTML = 'Page not found';
+        }
+    }
+}
+
+
 async function loadPokemon() {
-    if (currentPokemonNumber <= 15) {
+    await includeHTML();
+    if (currentPokemonNumber <= 151) {
         let url = `https://pokeapi.co/api/v2/pokemon/${currentPokemonNumber}`;
         let response = await fetch(url);
         currentPokemon = await response.json();
@@ -58,7 +74,7 @@ function renderAllPokemon() {
 
 function renderPokemon(pokemon, container) {
     container.innerHTML += `<h2>${pokemon['name'].charAt(0).toUpperCase() + pokemon['name'].slice(1)}</h2>
-        <img src="${pokemon['sprites']['other']['dream_world']['front_default']}">
+        <img class="pokemon-img" src="${pokemon['sprites']['other']['dream_world']['front_default']}">
         <p id="${pokemon['name']+6}" class="d-none">Height: ${pokemon['height'] / 10} m</p>
         <p id="${pokemon['name']+7}" class="d-none">Weight: ${pokemon['weight'] / 10} kg</p>`;
     getTypes(pokemon, container);
