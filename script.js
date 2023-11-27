@@ -1,6 +1,7 @@
 let currentPokemon;
 let currentPokemonNumber = 1;
 let allPokemon = [];
+const batchSize = 50;
 
 const typeColors = {
     "normal": "#A8A89A",
@@ -39,27 +40,84 @@ async function includeHTML() {
 }
 
 
+// async function loadPokemon() {
+//     await includeHTML();
+//     showLoadingScreen();
+//     if (currentPokemonNumber <= 10) {
+//         let url = `https://pokeapi.co/api/v2/pokemon/${currentPokemonNumber}`;
+//         let response = await fetch(url);
+//          currentPokemon = await response.json(); 
+//         allPokemon.push(currentPokemon);
+//         currentPokemonNumber++;
+//         loadPokemon();
+//     } else {
+//         renderAllPokemon();
+//         hideLoadingScreen();
+//     } 
+// }
+
+
 async function loadPokemon() {
+    showLoadingScreen();
     await includeHTML();
-    if (currentPokemonNumber <= 151) {
-        let url = `https://pokeapi.co/api/v2/pokemon/${currentPokemonNumber}`;
+    const startPokemonNumber = currentPokemonNumber;
+    const endPokemonNumber = currentPokemonNumber + 50;
+    for (let i = startPokemonNumber; i < endPokemonNumber; i++) {
+        let url = `https://pokeapi.co/api/v2/pokemon/${i}`;
         let response = await fetch(url);
         currentPokemon = await response.json();
         allPokemon.push(currentPokemon);
-        currentPokemonNumber++;
-        loadPokemon();
-    } else {
-        console.log("All Pokemon loaded!");
-        renderAllPokemon();
-    } 
+    }
+    currentPokemonNumber = endPokemonNumber;
+    renderAllPokemon(startPokemonNumber-1, endPokemonNumber);
+    hideLoadingScreen();
 }
 
 
-function renderAllPokemon() {
+
+function showLoadingScreen() {
+    document.getElementById('loadButton').style.display = 'none';
+    document.getElementById('pokedex').style.display = 'none';
+    document.getElementById('header').style.display = 'none';
+    document.getElementById('footer').style.display = 'none';
+    document.getElementById('loadingScreen').style.display = '';
+    document.getElementById('bodyForClick').classList.add('d-flex');
+}
+
+
+function hideLoadingScreen(){
+    document.getElementById('loadButton').style.display = '';
+    document.getElementById('pokedex').style.display = '';
+    document.getElementById('header').style.display = '';
+    document.getElementById('footer').style.display = '';
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('bodyForClick').classList.remove('d-flex');
+}
+
+
+// function renderAllPokemon() {
+//     const container = document.getElementById('pokedex');
+//     allPokemon.forEach((pokemon) => {
+//         // Erstelle einen Container für jedes Pokemon
+//         const pokemonDiv = document.createElement('div');
+//         pokemonDiv.id = pokemon['name'];
+//         pokemonDiv.classList.add('pokedex-style');
+//         pokemonDiv.setAttribute('onclick', `showEventListener(event, '${pokemon['name']}')`);
+//         // Setze die Informationen in den Container
+//         renderPokemon(pokemon, pokemonDiv);
+//         // Füge den Container dem Hauptcontainer hinzu
+//         container.appendChild(pokemonDiv);
+//         changeBackgroundColor(pokemon);
+//     });
+// }
+
+function renderAllPokemon(start, end) {
     const container = document.getElementById('pokedex');
-    allPokemon.forEach((pokemon) => {
+    for (let i = start; i < end - 1; i++) {
+        const pokemon = allPokemon[i];
         // Erstelle einen Container für jedes Pokemon
         const pokemonDiv = document.createElement('div');
+        console.log(pokemon);
         pokemonDiv.id = pokemon['name'];
         pokemonDiv.classList.add('pokedex-style');
         pokemonDiv.setAttribute('onclick', `showEventListener(event, '${pokemon['name']}')`);
@@ -68,13 +126,14 @@ function renderAllPokemon() {
         // Füge den Container dem Hauptcontainer hinzu
         container.appendChild(pokemonDiv);
         changeBackgroundColor(pokemon);
-    });
+    }
 }
+
 
 
 function renderPokemon(pokemon, container) {
     container.innerHTML += `<h2>${pokemon['name'].charAt(0).toUpperCase() + pokemon['name'].slice(1)}</h2>
-        <img class="pokemon-img" src="${pokemon['sprites']['other']['dream_world']['front_default']}">
+        <img class="pokemon-img" src="${pokemon['sprites']['other']['official-artwork']['front_default']}">
         <p id="${pokemon['name']+6}" class="d-none">Height: ${pokemon['height'] / 10} m</p>
         <p id="${pokemon['name']+7}" class="d-none">Weight: ${pokemon['weight'] / 10} kg</p>`;
     getTypes(pokemon, container);

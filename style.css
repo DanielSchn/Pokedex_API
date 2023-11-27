@@ -11,6 +11,28 @@ body {
 }
 
 
+button {
+    color: white;
+    background-color: black;
+    font-size: 24px;
+    font-family: 'Gill Sans';
+}
+
+
+#loadButton {
+    display: flex;
+    justify-content: center;
+    margin: 64px 0 64px 0;
+}
+
+.d-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
 .d-none {
     display: none;
 }
@@ -48,6 +70,13 @@ footer {
 header {
     height: 128px;
     width: 100%;
+}
+
+
+.loading-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
