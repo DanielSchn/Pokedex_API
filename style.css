@@ -4,9 +4,19 @@
 }
 
 
+* {
+    font-family: 'Gill Sans', sans-serif;
+}
+
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+
 body {
     margin: 0;
-    font-family: 'Gill Sans', sans-serif;
     background-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -42,7 +52,7 @@ button:hover {
 
 
 .d-none {
-    display: none;
+    display: none !important;
 }
 
 
@@ -67,17 +77,51 @@ footer {
     height: 128px;
     width: 100%;
     margin-top: 32px;
+    background-image: url(img/pokemon_footer.jpg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    color: white;
 }
 
 
 .footer-img {
     height: 64px;
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(53deg) brightness(105%) contrast(101%);
 }
 
 
 header {
     height: 128px;
-    width: 100%;
+    background-image: url(img/pokemon_header.jpg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+header a {
+    margin: 0;
+    font-size: 56px;
+    font-weight: 600;
+}
+
+
+.impressum {
+    margin: 64px;
+}
+
+
+.impressum a {
+    color: black;
+}
+
+
+.dsgvo {
+    margin: 64px;
 }
 
 

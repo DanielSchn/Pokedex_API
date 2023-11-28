@@ -2,7 +2,13 @@ let currentPokemon;
 let currentPokemonNumber = 1;
 let allPokemon = [];
 const batchSize = 50;
-
+const loadPokemonButton = document.getElementById('loadButton');
+const bodyClick = document.getElementById('bodyForClick');
+const container = document.getElementById('pokedex');
+const headerContainer = document.getElementById('header');
+const footerContainer = document.getElementById('footer');
+const loadingContainer = document.getElementById('loadingScreen');
+const dexStyleContainer = document.getElementsByClassName('pokedex-style');
 const typeColors = {
     "normal": "#A8A89A",
     "fighting": "#A64C3D",
@@ -26,10 +32,10 @@ const typeColors = {
 
 
 async function includeHTML() {
-    let includeElements = document.querySelectorAll('[w3-include-html]');   // Abrufen der Daten mit dem Attribut w3-include-html und speichern in einem Array
-    for (let i = 0; i < includeElements.length; i++) {                      // For Schleife zum abarbeiten aller Elemente mit dem Attribut w3-include-html
+    let includeElements = document.querySelectorAll('[w3-include-html]');
+    for (let i = 0; i < includeElements.length; i++) {
         const element = includeElements[i];
-        file = element.getAttribute("w3-include-html");                     // "includes/header.html"
+        file = element.getAttribute("w3-include-html");
         let resp = await fetch(file);
         if (resp.ok) {
             element.innerHTML = await resp.text();
@@ -40,28 +46,11 @@ async function includeHTML() {
 }
 
 
-// async function loadPokemon() {
-//     await includeHTML();
-//     showLoadingScreen();
-//     if (currentPokemonNumber <= 10) {
-//         let url = `https://pokeapi.co/api/v2/pokemon/${currentPokemonNumber}`;
-//         let response = await fetch(url);
-//          currentPokemon = await response.json(); 
-//         allPokemon.push(currentPokemon);
-//         currentPokemonNumber++;
-//         loadPokemon();
-//     } else {
-//         renderAllPokemon();
-//         hideLoadingScreen();
-//     } 
-// }
-
-
 async function loadPokemon() {
     showLoadingScreen();
     await includeHTML();
     const startPokemonNumber = currentPokemonNumber;
-    const endPokemonNumber = currentPokemonNumber + 50;
+    const endPokemonNumber = currentPokemonNumber + 20;
     for (let i = startPokemonNumber; i < endPokemonNumber; i++) {
         let url = `https://pokeapi.co/api/v2/pokemon/${i}`;
         let response = await fetch(url);
@@ -69,66 +58,43 @@ async function loadPokemon() {
         allPokemon.push(currentPokemon);
     }
     currentPokemonNumber = endPokemonNumber;
-    renderAllPokemon(startPokemonNumber-1, endPokemonNumber);
+    renderAllPokemon(startPokemonNumber-1, endPokemonNumber-1);     // start und end muss -1 gerechnet werden, um von für die nächste Funktion die richtigen Werte zu nutzen.
     hideLoadingScreen();
 }
 
 
-
 function showLoadingScreen() {
-    document.getElementById('loadButton').style.display = 'none';
-    document.getElementById('pokedex').style.display = 'none';
-    document.getElementById('header').style.display = 'none';
-    document.getElementById('footer').style.display = 'none';
-    document.getElementById('loadingScreen').style.display = '';
-    document.getElementById('bodyForClick').classList.add('d-flex');
+    loadPokemonButton.classList.add('d-none');
+    container.style.display = 'none';
+    headerContainer.style.display = 'none';
+    footerContainer.style.display = 'none';
+    loadingContainer.style.display = '';
+    bodyClick.classList.add('d-flex');
 }
 
 
 function hideLoadingScreen(){
-    document.getElementById('loadButton').style.display = '';
-    document.getElementById('pokedex').style.display = '';
-    document.getElementById('header').style.display = '';
-    document.getElementById('footer').style.display = '';
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('bodyForClick').classList.remove('d-flex');
+    loadPokemonButton.classList.remove('d-none');
+    container.style.display = '';
+    headerContainer.style.display = '';
+    footerContainer.style.display = '';
+    loadingContainer.style.display = 'none';
+    bodyClick.classList.remove('d-flex');
 }
 
 
-// function renderAllPokemon() {
-//     const container = document.getElementById('pokedex');
-//     allPokemon.forEach((pokemon) => {
-//         // Erstelle einen Container für jedes Pokemon
-//         const pokemonDiv = document.createElement('div');
-//         pokemonDiv.id = pokemon['name'];
-//         pokemonDiv.classList.add('pokedex-style');
-//         pokemonDiv.setAttribute('onclick', `showEventListener(event, '${pokemon['name']}')`);
-//         // Setze die Informationen in den Container
-//         renderPokemon(pokemon, pokemonDiv);
-//         // Füge den Container dem Hauptcontainer hinzu
-//         container.appendChild(pokemonDiv);
-//         changeBackgroundColor(pokemon);
-//     });
-// }
-
 function renderAllPokemon(start, end) {
-    const container = document.getElementById('pokedex');
-    for (let i = start; i < end - 1; i++) {
+    for (let i = start; i < end; i++) {
         const pokemon = allPokemon[i];
-        // Erstelle einen Container für jedes Pokemon
-        const pokemonDiv = document.createElement('div');
-        console.log(pokemon);
+        const pokemonDiv = document.createElement('div');       // Erstelle einen Container für jedes Pokemon, solange die for Schleife aktiv ist.
         pokemonDiv.id = pokemon['name'];
         pokemonDiv.classList.add('pokedex-style');
         pokemonDiv.setAttribute('onclick', `showEventListener(event, '${pokemon['name']}')`);
-        // Setze die Informationen in den Container
-        renderPokemon(pokemon, pokemonDiv);
-        // Füge den Container dem Hauptcontainer hinzu
-        container.appendChild(pokemonDiv);
+        renderPokemon(pokemon, pokemonDiv);     // Aufrufen der Renderfunktion um die Informationen in den Container pokemonDiv zu schreiben.
+        container.appendChild(pokemonDiv);      // Füge den pokemonDiv Container dem pokedex Hauptcontainer hinzu
         changeBackgroundColor(pokemon);
     }
 }
-
 
 
 function renderPokemon(pokemon, container) {
@@ -139,7 +105,6 @@ function renderPokemon(pokemon, container) {
     getTypes(pokemon, container);
     getStats(pokemon, container);
 }
-
 
 
 function getTypes(pokemon, container) {
@@ -190,27 +155,30 @@ function getColorForType(type) {
 
 
 function showPokemonCard(pokemon) {
+    let pokemonContainer = document.getElementById(pokemon);
     for (let g = 0; g < 9; g++) {
         document.getElementById(pokemon+g).classList.remove("d-none");
         document.getElementById(pokemon+g).setAttribute('onclick', `closeCard('${pokemon}')`);   
     }
-    document.getElementById(pokemon).removeAttribute('onclick', `showEventListener(event, '${pokemon}')`);
-    document.getElementById(pokemon).setAttribute('onclick', `closeCard('${pokemon}')`);
-    document.getElementById('bodyForClick').setAttribute('onclick', `closeCard('${pokemon}')`);
-    document.getElementById(pokemon).classList.add('show-card');
+    pokemonContainer.removeAttribute('onclick', `showEventListener(event, '${pokemon}')`);
+    pokemonContainer.setAttribute('onclick', `closeCard('${pokemon}')`);
+    bodyClick.setAttribute('onclick', `closeCard('${pokemon}')`);
+    pokemonContainer.classList.add('show-card');
+    loadPokemonButton.classList.add('d-none');
     hideAllCards(pokemon);
 }
 
 
-
 function closeCard(pokemon) {
+    let pokemonContainer = document.getElementById(pokemon);
     for (let g = 0; g < 9; g++) {
         document.getElementById(pokemon+g).classList.add("d-none");
-        document.getElementById(pokemon).removeAttribute('onclick', `closeCard('${pokemon}')`);    
+        pokemonContainer.removeAttribute('onclick', `closeCard('${pokemon}')`);    
     }
-    document.getElementById(pokemon).setAttribute('onclick', `showEventListener(event, '${pokemon}')`);
-    document.getElementById('bodyForClick').removeAttribute('onclick', `closeCard('${pokemon}')`);
-    document.getElementById(pokemon).classList.remove('show-card');
+    pokemonContainer.setAttribute('onclick', `showEventListener(event, '${pokemon}')`);
+    bodyClick.removeAttribute('onclick', `closeCard('${pokemon}')`);
+    pokemonContainer.classList.remove('show-card');
+    loadPokemonButton.classList.remove('d-none');
     showAllCards();
     event.stopPropagation();
 }
@@ -223,23 +191,22 @@ function showEventListener(event, pokemon) {
     showPokemonCard(pokemon);
 }
 
+
 function hideAllCards(pokemon) {
-    let elements = document.getElementsByClassName('pokedex-style');
-    for (let i = 0; i < elements.length; i++) {
-        if (elements[i].id !== pokemon) {
-            elements[i].style.display = 'none';
+    for (let i = 0; i < dexStyleContainer.length; i++) {
+        if (dexStyleContainer[i].id !== pokemon) {
+            dexStyleContainer[i].style.display = 'none';
         } 
     }
-    document.getElementById('pokedex').style.height = '100vh';
-    document.getElementById('pokedex').style.alignItems = 'center';
+    container.style.height = '100vh';
+    container.style.alignItems = 'center';
 }
 
 
 function showAllCards() {
-    let elements = document.getElementsByClassName('pokedex-style');
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].style.display = '';
+    for (let i = 0; i < dexStyleContainer.length; i++) {
+        dexStyleContainer[i].style.display = '';
     }
-    document.getElementById('pokedex').style.height = '';
-    document.getElementById('pokedex').style.alignItems = '';
+    container.style.height = '';
+    container.style.alignItems = '';
 }
