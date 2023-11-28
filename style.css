@@ -16,6 +16,14 @@ button {
     background-color: black;
     font-size: 24px;
     font-family: 'Gill Sans';
+    padding: 8px;
+    border-radius: 16px;
+    cursor: pointer;
+}
+
+
+button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 
