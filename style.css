@@ -79,8 +79,21 @@ footer {
     margin-top: 32px;
     background-image: url(img/pokemon_footer.jpg);
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: 100% 100%;
     color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+footer a {
+    cursor: pointer;
+}
+
+
+footer a:hover {
+    color: black;
 }
 
 
@@ -110,18 +123,49 @@ header a {
 }
 
 
+header a:hover {
+    color: black;
+}
+
+
 .impressum {
     margin: 64px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 
 .impressum a {
-    color: black;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+
+.impressum a:hover {
+    color: white;
+}
+
+
+.impressum-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 
 .dsgvo {
     margin: 64px;
+    max-width: 500px;
+}
+
+
+.dsgvo a {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+
+.dsgvo a:hover {
+    color: white;
 }
 
 
@@ -215,3 +259,27 @@ p {
     margin-top: 32px;
     display: none;
 }
+
+
+/* Custom Scroll Bar */
+
+
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #CCCCCC; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #E0524E; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #FFFFFF; 
+  }

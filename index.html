@@ -11,13 +11,15 @@
 </head>
 
 <body onload="loadPokemon()" id="bodyForClick">
-    <img src="img/loading_poke.gif" alt="loading_poke" class="loading-screen" id="loadingScreen">
-    <div id="header" w3-include-html="includes/header.html"></div>
-    <div id="pokedex" class="pokedex-class"></div>
-    <div id="loadButton">
-        <button onclick="loadPokemon()">Load more Pokemon</button>
+    <div>
+        <img src="img/loading_poke.gif" alt="loading_poke" class="loading-screen" id="loadingScreen">
+        <div id="header" w3-include-html="includes/header.html"></div>
+        <div id="pokedex" class="pokedex-class"></div>
+        <div id="loadButton">
+            <button onclick="loadPokemon()">Load more Pokemon</button>
+        </div>
+        <div id="footer" w3-include-html="includes/footer.html"></div>
     </div>
-    <div id="footer" w3-include-html="includes/footer.html"></div>
 </body>
 
 </html>

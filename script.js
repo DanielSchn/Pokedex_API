@@ -200,6 +200,8 @@ function hideAllCards(pokemon) {
     }
     container.style.height = '100vh';
     container.style.alignItems = 'center';
+    headerContainer.classList.add('d-none');
+    footerContainer.classList.add('d-none');
 }
 
 
@@ -209,4 +211,6 @@ function showAllCards() {
     }
     container.style.height = '';
     container.style.alignItems = '';
+    headerContainer.classList.remove('d-none');
+    footerContainer.classList.remove('d-none');
 }
