@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokedex</title>
-    <link rel="icon" type="image/x-icon" href="/img/pokeball.png">
+    <link rel="icon" type="image/x-icon" href="img/pokeball_favicon_smal.png">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
 
-<body onload="loadPokemon()" id="bodyForClick">
+<body onload="includeHTML(); loadPokemon()" id="bodyForClick">
     <div>
         <img src="img/loading_poke.gif" alt="loading_poke" class="loading-screen" id="loadingScreen">
         <div id="header" w3-include-html="includes/header.html"></div>

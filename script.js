@@ -48,7 +48,6 @@ async function includeHTML() {
 
 async function loadPokemon() {
     showLoadingScreen();
-    await includeHTML();
     const startPokemonNumber = currentPokemonNumber;
     const endPokemonNumber = currentPokemonNumber + 20;
     for (let i = startPokemonNumber; i < endPokemonNumber; i++) {
