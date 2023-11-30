@@ -31,6 +31,7 @@ const typeColors = {
 };
 
 
+
 async function includeHTML() {
     let includeElements = document.querySelectorAll('[w3-include-html]');
     for (let i = 0; i < includeElements.length; i++) {
@@ -47,6 +48,7 @@ async function includeHTML() {
 
 
 async function loadPokemon() {
+    const currentScrollTop = window.scrollY;
     showLoadingScreen();
     const startPokemonNumber = currentPokemonNumber;
     const endPokemonNumber = currentPokemonNumber + 20;
@@ -58,7 +60,7 @@ async function loadPokemon() {
     }
     currentPokemonNumber = endPokemonNumber;
     renderAllPokemon(startPokemonNumber-1, endPokemonNumber-1);     // start und end muss -1 gerechnet werden, um von für die nächste Funktion die richtigen Werte zu nutzen.
-    hideLoadingScreen();
+    window.scrollTo(0, currentScrollTop);
 }
 
 
@@ -93,6 +95,7 @@ function renderAllPokemon(start, end) {
         container.appendChild(pokemonDiv);      // Füge den pokemonDiv Container dem pokedex Hauptcontainer hinzu
         changeBackgroundColor(pokemon);
     }
+    hideLoadingScreen();
 }
 
 
@@ -159,12 +162,18 @@ function showPokemonCard(pokemon) {
         document.getElementById(pokemon+g).classList.remove("d-none");
         document.getElementById(pokemon+g).setAttribute('onclick', `closeCard('${pokemon}')`);   
     }
+    showPokemonCardStyles(pokemon, pokemonContainer);
+    hideAllCards(pokemon);
+}
+
+
+function showPokemonCardStyles(pokemon, pokemonContainer) {
     pokemonContainer.removeAttribute('onclick', `showEventListener(event, '${pokemon}')`);
     pokemonContainer.setAttribute('onclick', `closeCard('${pokemon}')`);
     bodyClick.setAttribute('onclick', `closeCard('${pokemon}')`);
     pokemonContainer.classList.add('show-card');
     loadPokemonButton.classList.add('d-none');
-    hideAllCards(pokemon);
+    document.getElementById(pokemon).classList.add('cursor-unset');
 }
 
 
@@ -174,12 +183,18 @@ function closeCard(pokemon) {
         document.getElementById(pokemon+g).classList.add("d-none");
         pokemonContainer.removeAttribute('onclick', `closeCard('${pokemon}')`);    
     }
+    closeCardStyles(pokemon, pokemonContainer);
+    showAllCards();
+    event.stopPropagation();
+}
+
+
+function closeCardStyles(pokemon, pokemonContainer){
     pokemonContainer.setAttribute('onclick', `showEventListener(event, '${pokemon}')`);
     bodyClick.removeAttribute('onclick', `closeCard('${pokemon}')`);
     pokemonContainer.classList.remove('show-card');
     loadPokemonButton.classList.remove('d-none');
-    showAllCards();
-    event.stopPropagation();
+    document.getElementById(pokemon).classList.remove('cursor-unset');
 }
 
 

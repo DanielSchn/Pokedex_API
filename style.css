@@ -38,6 +38,11 @@ button:hover {
 }
 
 
+.cursor-unset {
+    cursor: unset !important;
+}
+
+
 #loadButton {
     display: flex;
     justify-content: center;
@@ -222,6 +227,12 @@ p {
 }
 
 
+.pokedex-style:hover {
+    scale: 1.05;
+    transition: ease-in-out 125ms;
+}
+
+
 #pokemonName {
     font-size: 40px;
     font-weight: 600;
@@ -232,7 +243,7 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    scale: 1.2;
+    scale: 1.2 !important;
     transition: ease-in-out 125ms;
 }
 
