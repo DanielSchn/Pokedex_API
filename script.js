@@ -59,7 +59,7 @@ async function loadPokemon() {
         allPokemon.push(currentPokemon);
     }
     currentPokemonNumber = endPokemonNumber;
-    renderAllPokemon(startPokemonNumber-1, endPokemonNumber-1);     // start und end muss -1 gerechnet werden, um von für die nächste Funktion die richtigen Werte zu nutzen.
+    renderAllPokemon(startPokemonNumber - 1, endPokemonNumber - 1);     // start und end muss -1 gerechnet werden, um von für die nächste Funktion die richtigen Werte zu nutzen.
     window.scrollTo(0, currentScrollTop);
 }
 
@@ -74,7 +74,7 @@ function showLoadingScreen() {
 }
 
 
-function hideLoadingScreen(){
+function hideLoadingScreen() {
     loadPokemonButton.classList.remove('d-none');
     container.style.display = '';
     headerContainer.style.display = '';
@@ -89,6 +89,7 @@ function renderAllPokemon(start, end) {
         const pokemon = allPokemon[i];
         const pokemonDiv = document.createElement('div');       // Erstelle einen Container für jedes Pokemon, solange die for Schleife aktiv ist.
         pokemonDiv.id = pokemon['name'];
+        pokemonDiv.classList.add(i);
         pokemonDiv.classList.add('pokedex-style');
         pokemonDiv.setAttribute('onclick', `showEventListener(event, '${pokemon['name']}')`);
         renderPokemon(pokemon, pokemonDiv);     // Aufrufen der Renderfunktion um die Informationen in den Container pokemonDiv zu schreiben.
@@ -102,8 +103,9 @@ function renderAllPokemon(start, end) {
 function renderPokemon(pokemon, container) {
     container.innerHTML += `<h2>${pokemon['name'].charAt(0).toUpperCase() + pokemon['name'].slice(1)}</h2>
         <img class="pokemon-img" src="${pokemon['sprites']['other']['official-artwork']['front_default']}">
-        <p id="${pokemon['name']+6}" class="d-none">Height: ${pokemon['height'] / 10} m</p>
-        <p id="${pokemon['name']+7}" class="d-none">Weight: ${pokemon['weight'] / 10} kg</p>`;
+        <p id="${pokemon['name'] + 6}" class="d-none">Height: ${pokemon['height'] / 10} m</p>
+        <p id="${pokemon['name'] + 7}" class="d-none">Weight: ${pokemon['weight'] / 10} kg</p>
+        `;
     getTypes(pokemon, container);
     getStats(pokemon, container);
 }
@@ -113,7 +115,7 @@ function getTypes(pokemon, container) {
     let typesHtml = '';
     let types = pokemon['types'];
     for (let j = 0; j < types.length; j++) {
-        typesHtml += `<p id="${pokemon['name']+(j+8)}" class="d-none">Type: ${types[j]['type']['name'].charAt(0).toUpperCase() + types[j]['type']['name'].slice(1)}</p>`;
+        typesHtml += `<p id="${pokemon['name'] + (j + 8)}" class="d-none">Type: ${types[j]['type']['name'].charAt(0).toUpperCase() + types[j]['type']['name'].slice(1)}</p>`;
     }
     container.innerHTML += typesHtml;
 }
@@ -126,7 +128,7 @@ function getStats(pokemon, container) {
         const statName = stats[i]['stat']['name'];
         const baseStat = stats[i]['base_stat'];
         const filledBarWidth = baseStat + 'px';
-        htmlContent += `<div id=${pokemon['name']+(i)} class="d-none stat-bar">
+        htmlContent += `<div id=${pokemon['name'] + (i)} class="d-none stat-bar">
             <div class="filled-bar" style="width: ${filledBarWidth};"></div>
             <div class="stat-text">${statName}: ${baseStat}</div>
         </div>`;
@@ -156,40 +158,41 @@ function getColorForType(type) {
 }
 
 
-function showPokemonCard(pokemon) {
+function showPokemonCard(pokemon, scrollCard) {
     let pokemonContainer = document.getElementById(pokemon);
     for (let g = 0; g < 9; g++) {
-        document.getElementById(pokemon+g).classList.remove("d-none");
-        document.getElementById(pokemon+g).setAttribute('onclick', `closeCard('${pokemon}')`);   
+        document.getElementById(pokemon + g).classList.remove("d-none");
+        document.getElementById(pokemon + g).setAttribute('onclick', `closeCard('${pokemon}', ${scrollCard})`);
     }
-    showPokemonCardStyles(pokemon, pokemonContainer);
+    showPokemonCardStyles(pokemon, pokemonContainer, scrollCard);
     hideAllCards(pokemon);
 }
 
 
-function showPokemonCardStyles(pokemon, pokemonContainer) {
+function showPokemonCardStyles(pokemon, pokemonContainer, scrollCard) {
     pokemonContainer.removeAttribute('onclick', `showEventListener(event, '${pokemon}')`);
-    pokemonContainer.setAttribute('onclick', `closeCard('${pokemon}')`);
-    bodyClick.setAttribute('onclick', `closeCard('${pokemon}')`);
+    pokemonContainer.setAttribute('onclick', `closeCard('${pokemon}', ${scrollCard})`);
+    bodyClick.setAttribute('onclick', `closeCard('${pokemon}', ${scrollCard})`);
     pokemonContainer.classList.add('show-card');
     loadPokemonButton.classList.add('d-none');
     document.getElementById(pokemon).classList.add('cursor-unset');
 }
 
 
-function closeCard(pokemon) {
+function closeCard(pokemon, scrollCard) {
     let pokemonContainer = document.getElementById(pokemon);
     for (let g = 0; g < 9; g++) {
-        document.getElementById(pokemon+g).classList.add("d-none");
-        pokemonContainer.removeAttribute('onclick', `closeCard('${pokemon}')`);    
+        document.getElementById(pokemon + g).classList.add("d-none");
+        pokemonContainer.removeAttribute('onclick', `closeCard('${pokemon}')`);
     }
     closeCardStyles(pokemon, pokemonContainer);
     showAllCards();
+    window.scrollTo(0, scrollCard);
     event.stopPropagation();
 }
 
 
-function closeCardStyles(pokemon, pokemonContainer){
+function closeCardStyles(pokemon, pokemonContainer) {
     pokemonContainer.setAttribute('onclick', `showEventListener(event, '${pokemon}')`);
     bodyClick.removeAttribute('onclick', `closeCard('${pokemon}')`);
     pokemonContainer.classList.remove('show-card');
@@ -199,10 +202,11 @@ function closeCardStyles(pokemon, pokemonContainer){
 
 
 function showEventListener(event, pokemon) {
+    let scrollCard = window.scrollY;
     if (event.stopPropagation) {
         event.stopPropagation();
-    } 
-    showPokemonCard(pokemon);
+    }
+    showPokemonCard(pokemon, scrollCard);
 }
 
 
@@ -210,7 +214,7 @@ function hideAllCards(pokemon) {
     for (let i = 0; i < dexStyleContainer.length; i++) {
         if (dexStyleContainer[i].id !== pokemon) {
             dexStyleContainer[i].style.display = 'none';
-        } 
+        }
     }
     container.style.height = '100vh';
     container.style.alignItems = 'center';
