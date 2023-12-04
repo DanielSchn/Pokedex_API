@@ -50,7 +50,7 @@ async function loadPokemon() {
     const currentScrollTop = window.scrollY;
     showLoadingScreen();
     const startPokemonNumber = currentPokemonNumber;
-    const endPokemonNumber = currentPokemonNumber + 20;
+    const endPokemonNumber = currentPokemonNumber + 50;
     for (let i = startPokemonNumber; i < endPokemonNumber; i++) {
         let url = `https://pokeapi.co/api/v2/pokemon/${i}`;
         let response = await fetch(url);
