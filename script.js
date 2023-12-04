@@ -89,7 +89,7 @@ function renderAllPokemon(start, end) {
         const pokemon = allPokemon[i];
         const pokemonDiv = document.createElement('div');       // Erstelle einen Container für jedes Pokemon, solange die for Schleife aktiv ist.
         pokemonDiv.id = pokemon['name'];
-        pokemonDiv.classList.add(i);
+        pokemonDiv.setAttribute('name', i);
         pokemonDiv.classList.add('pokedex-style');
         pokemonDiv.setAttribute('onclick', `showEventListener(event, '${pokemon['name']}')`);
         renderPokemon(pokemon, pokemonDiv);     // Aufrufen der Renderfunktion um die Informationen in den Container pokemonDiv zu schreiben.
@@ -102,7 +102,11 @@ function renderAllPokemon(start, end) {
 
 function renderPokemon(pokemon, container) {
     container.innerHTML += `<h2>${pokemon['name'].charAt(0).toUpperCase() + pokemon['name'].slice(1)}</h2>
+        <div class="img-buttons">
+        <button id="${pokemon['name']}ButtonLeft" class="d-none left-right-button"> < </button>
         <img class="pokemon-img" src="${pokemon['sprites']['other']['official-artwork']['front_default']}">
+        <button id="${pokemon['name']}ButtonRight" class="d-none left-right-button"> > </button>
+        </div>
         <p id="${pokemon['name'] + 6}" class="d-none">Height: ${pokemon['height'] / 10} m</p>
         <p id="${pokemon['name'] + 7}" class="d-none">Weight: ${pokemon['weight'] / 10} kg</p>
         `;
@@ -166,16 +170,40 @@ function showPokemonCard(pokemon, scrollCard) {
     }
     showPokemonCardStyles(pokemon, pokemonContainer, scrollCard);
     hideAllCards(pokemon);
+    getNextPoke(pokemon);
+    getPrevPoke(pokemon);
 }
 
 
 function showPokemonCardStyles(pokemon, pokemonContainer, scrollCard) {
+    document.getElementById(`${pokemon}ButtonLeft`).classList.remove('d-none');
+    document.getElementById(`${pokemon}ButtonRight`).classList.remove('d-none');
     pokemonContainer.removeAttribute('onclick', `showEventListener(event, '${pokemon}')`);
     pokemonContainer.setAttribute('onclick', `closeCard('${pokemon}', ${scrollCard})`);
     bodyClick.setAttribute('onclick', `closeCard('${pokemon}', ${scrollCard})`);
     pokemonContainer.classList.add('show-card');
     loadPokemonButton.classList.add('d-none');
     document.getElementById(pokemon).classList.add('cursor-unset');
+}
+
+
+function getNextPoke(pokemon) {
+    const testElement = document.getElementById(pokemon);
+    let nextPoke = parseInt(testElement.getAttribute('name'), 10);
+    nextPoke++;
+    const newPoke = document.querySelector(`[name="${nextPoke}"]`);
+    const newPokeId = newPoke ? newPoke.id : null;
+    document.getElementById(`${pokemon}ButtonRight`).setAttribute('onclick', `showEventListener(event, '${newPokeId}')`);
+}
+
+
+function getPrevPoke(pokemon) {
+    const testElement = document.getElementById(pokemon);
+    let nextPoke = parseInt(testElement.getAttribute('name'), 10);
+    nextPoke--;
+    const newPoke = document.querySelector(`[name="${nextPoke}"]`);
+    const newPokeId = newPoke ? newPoke.id : null;
+    document.getElementById(`${pokemon}ButtonLeft`).setAttribute('onclick', `showEventListener(event, '${newPokeId}')`);
 }
 
 
@@ -193,15 +221,19 @@ function closeCard(pokemon, scrollCard) {
 
 
 function closeCardStyles(pokemon, pokemonContainer) {
+    document.getElementById(`${pokemon}ButtonLeft`).classList.add('d-none');
+    document.getElementById(`${pokemon}ButtonRight`).classList.add('d-none');
     pokemonContainer.setAttribute('onclick', `showEventListener(event, '${pokemon}')`);
     bodyClick.removeAttribute('onclick', `closeCard('${pokemon}')`);
     pokemonContainer.classList.remove('show-card');
     loadPokemonButton.classList.remove('d-none');
     document.getElementById(pokemon).classList.remove('cursor-unset');
+    
 }
 
 
 function showEventListener(event, pokemon) {
+    showAllCards();
     let scrollCard = window.scrollY;
     if (event.stopPropagation) {
         event.stopPropagation();
@@ -232,3 +264,9 @@ function showAllCards() {
     headerContainer.classList.remove('d-none');
     footerContainer.classList.remove('d-none');
 }
+
+
+// function getPokemonNameByClassNumber(pokemon) {                // Hier muss bei einem Klick die Nummer aus dem Namen übergeben werden und die id abgerufen werden.
+//     let pokemonName = document.getElementById(pokemon);
+//     console.log(pokemonName);
+// }

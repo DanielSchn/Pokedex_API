@@ -244,7 +244,6 @@ p {
     justify-content: center;
     align-items: center;
     scale: 1.2 !important;
-    transition: ease-in-out 125ms;
 }
 
 
@@ -297,4 +296,21 @@ p {
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #FFFFFF; 
+  }
+
+
+  .img-buttons {
+    display: flex;
+    align-items: baseline;
+  }
+
+
+  .left-right-button {
+    display: flex;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    font-size: 12px;
+    justify-content: center;
+    align-items: center;
   }
