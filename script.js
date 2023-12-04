@@ -31,7 +31,6 @@ const typeColors = {
 };
 
 
-
 async function includeHTML() {
     let includeElements = document.querySelectorAll('[w3-include-html]');
     for (let i = 0; i < includeElements.length; i++) {
@@ -193,7 +192,8 @@ function getNextPoke(pokemon) {
     nextPoke++;
     const newPoke = document.querySelector(`[name="${nextPoke}"]`);
     const newPokeId = newPoke ? newPoke.id : null;
-    document.getElementById(`${pokemon}ButtonRight`).setAttribute('onclick', `showEventListener(event, '${newPokeId}')`);
+    document.getElementById(`${pokemon}ButtonRight`).setAttribute('onclick', `closeCardByNextPrev('${pokemon}'); showEventListener(event, '${newPokeId}')`);
+    
 }
 
 
@@ -203,7 +203,23 @@ function getPrevPoke(pokemon) {
     nextPoke--;
     const newPoke = document.querySelector(`[name="${nextPoke}"]`);
     const newPokeId = newPoke ? newPoke.id : null;
-    document.getElementById(`${pokemon}ButtonLeft`).setAttribute('onclick', `showEventListener(event, '${newPokeId}')`);
+    document.getElementById(`${pokemon}ButtonLeft`).setAttribute('onclick', `closeCardByNextPrev('${pokemon}'); showEventListener(event, '${newPokeId}')`);
+}
+
+
+function closeCardByNextPrev(pokemon) {
+    let pokemonContainer = document.getElementById(pokemon);
+    for (let g = 0; g < 9; g++) {
+        document.getElementById(pokemon + g).classList.add("d-none");
+        pokemonContainer.removeAttribute('onclick', `closeCard('${pokemon}')`);
+    }
+    document.getElementById(`${pokemon}ButtonLeft`).classList.add('d-none');
+    document.getElementById(`${pokemon}ButtonRight`).classList.add('d-none');
+    pokemonContainer.setAttribute('onclick', `showEventListener(event, '${pokemon}')`);
+    pokemonContainer.classList.remove('show-card');
+    loadPokemonButton.classList.remove('d-none');
+    document.getElementById(pokemon).classList.remove('cursor-unset');
+    event.stopPropagation();
 }
 
 
@@ -234,11 +250,11 @@ function closeCardStyles(pokemon, pokemonContainer) {
 
 function showEventListener(event, pokemon) {
     showAllCards();
-    let scrollCard = window.scrollY;
     if (event.stopPropagation) {
         event.stopPropagation();
     }
-    showPokemonCard(pokemon, scrollCard);
+    const scrollCardY = window.scrollY;
+    showPokemonCard(pokemon, scrollCardY);
 }
 
 
@@ -264,9 +280,3 @@ function showAllCards() {
     headerContainer.classList.remove('d-none');
     footerContainer.classList.remove('d-none');
 }
-
-
-// function getPokemonNameByClassNumber(pokemon) {                // Hier muss bei einem Klick die Nummer aus dem Namen übergeben werden und die id abgerufen werden.
-//     let pokemonName = document.getElementById(pokemon);
-//     console.log(pokemonName);
-// }
